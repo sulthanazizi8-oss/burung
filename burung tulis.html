@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Animasi Kanji Tori (Burung) - Looping</title>
+    <style>
+        /* Tampilan minimalis: background putih polos dan tanpa tombol */
+        body { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            background-color: #ffffff; 
+            margin: 0;
+            overflow: hidden;
+        }
+
+        svg { 
+            width: 400px; 
+            height: 400px; 
+        }
+
+        path { 
+            fill: none; 
+            stroke: #000000; /* Hitam pekat */
+            stroke-width: 4.5; 
+            stroke-linecap: round; 
+            stroke-linejoin: round; 
+        }
+        
+        /* Gaya Nomor Urutan */
+        text { 
+            font-size: 6.5px; 
+            font-weight: bold; 
+            fill: #000000; 
+            opacity: 0; 
+            transition: opacity 0.3s; 
+            font-family: Arial, sans-serif;
+        }
+
+        .show-num { opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <svg viewBox="0 0 100 100" id="kanji-svg">
+        <!-- 11 Guratan Kanji Tori (鳥) Berdasarkan Gambar Sumber -->
+        <path id="p1" d="M45,8 Q38,13 32,20" /> <!-- 1: Slanted top (Red) -->
+        <path id="p2" d="M28,20 L28,58" /> <!-- 2: Vertical left (Brown) -->
+        <path id="p3" d="M28,22 L62,22 L58,40" /> <!-- 3: Top right box (Gold) -->
+        <path id="p4" d="M28,31 L58,31" /> <!-- 4: Inner horizontal 1 (Light Green) -->
+        <path id="p5" d="M28,40 L58,40" /> <!-- 5: Inner horizontal 2 (Green) -->
+        <path id="p6" d="M28,50 L78,48" /> <!-- 6: Long horizontal (Green) -->
+        <path id="p7" d="M28,58 L82,56 Q88,56 88,64 L80,88 Q78,92 65,90" /> <!-- 7: Big body hook (Teal) -->
+        
+        <!-- Empat titik bawah (8-11) sesuai gambar -->
+        <path id="p8" d="M18,72 Q16,84 15,92" /> <!-- 8: Titik 1 -->
+        <path id="p9" d="M32,71 Q35,82 37,88" /> <!-- 9: Titik 2 -->
+        <path id="p10" d="M48,68 Q52,78 54,84" /> <!-- 10: Titik 3 -->
+        <path id="p11" d="M63,65 Q68,76 70,81" /> <!-- 11: Titik 4 -->
+
+        <!-- Penempatan nomor urutan (disesuaikan agar tidak tertutup garis) -->
+        <text x="38" y="10" id="n1">1</text>
+        <text x="21" y="25" id="n2">2</text>
+        <text x="44" y="20" id="n3">3</text>
+        <text x="31" y="29" id="n4">4</text>
+        <text x="31" y="38" id="n5">5</text>
+        <text x="31" y="48" id="n6">6</text>
+        <text x="31" y="57" id="n7">7</text>
+        <text x="10" y="74" id="n8">8</text>
+        <text x="25" y="74" id="n9">9</text>
+        <text x="40" y="71" id="n10">10</text>
+        <text x="54" y="68" id="n11">11</text>
+    </svg>
+
+    <script>
+        const totalStrokes = 11;
+
+        function animateLoop() {
+            // 1. Reset awal: Sembunyikan semua guratan dan nomor
+            for (let i = 1; i <= totalStrokes; i++) {
+                const path = document.getElementById(`p${i}`);
+                const num = document.getElementById(`n${i}`);
+                const length = path.getTotalLength();
+                
+                path.style.transition = 'none';
+                path.style.strokeDasharray = length;
+                path.style.strokeDashoffset = length;
+                num.classList.remove('show-num');
+            }
+
+            // 2. Jalankan animasi menulis berurutan 1 sampai 11
+            let delay = 300; 
+            for (let i = 1; i <= totalStrokes; i++) {
+                setTimeout(() => {
+                    const path = document.getElementById(`p${i}`);
+                    const num = document.getElementById(`n${i}`);
+                    
+                    num.classList.add('show-num'); 
+                    path.style.transition = 'stroke-dashoffset 0.6s ease-in-out';
+                    path.style.strokeDashoffset = '0';
+                }, delay);
+                
+                delay += 800; // Jeda antar guratan
+            }
+
+            // 3. Mengulang animasi terus-menerus (looping)
+            setTimeout(animateLoop, delay + 2500);
+        }
+
+        // Jalankan otomatis saat halaman dimuat
+        window.onload = animateLoop;
+    </script>
+</body>
+</html>
